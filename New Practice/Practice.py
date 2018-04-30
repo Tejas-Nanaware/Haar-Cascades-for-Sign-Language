@@ -76,24 +76,13 @@ class StartPage(tk.Frame):
 
 class PageTwo(tk.Frame):
 
-	def __init__(self, parent, controller):
-		tk.Frame.__init__(self, parent)
-		self.controller = controller
-		# label = tk.Label(self, text="This is page 2", font=controller.title_font)
-		# label.place(relx=.53, rely=.65, anchor="c")
-		home_button = tk.Button(self, text="Go to the start page",command=lambda: controller.show_frame("StartPage"))
-		home_button.place(relx=.9, rely=.9, anchor="c")
-		imageFrame = tk.Frame(self, width=1000, height=450)
-		imageFrame.grid(row=0, column=0, padx=12, pady=12)
-		a_button = tk.Button(self, text="A", bg="#2ce313", fg="black",command=lambda: detect_a)
-		a_button.grid(row=1,column=0)
-        
-		# video in frame
-		lmain = tk.Label(imageFrame)
-		lmain.grid(row=0, column=0)
-		cap = cv2.VideoCapture(0)
-
-		def show_frame():
+	def detect_a(self):
+		print("a")
+		for (x,y,w,h) in A:
+			cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 2)
+			font = cv2.FONT_HERSHEY_SIMPLEX
+			cv2.putText(frame,'A',(x,y+h), font, 4, (0,0,255), 3, cv2.LINE_AA)
+	def show_frame(self):
 			_, frame = cap.read()
 			frame = cv2.flip(frame, 1)
 			cv2image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGBA)
@@ -110,14 +99,26 @@ class PageTwo(tk.Frame):
 			lmain.after(10, show_frame) 
 			sliderFrame = tk.Frame(self, width=1000, height=450)
 			sliderFrame.grid(row = 1000, column=0, padx=12, pady=12)
-		show_frame()
 
-		def detect_a():
-			print("a")
-			for (x,y,w,h) in A:
-				cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 2)
-				font = cv2.FONT_HERSHEY_SIMPLEX
-				cv2.putText(frame,'A',(x,y+h), font, 4, (0,0,255), 3, cv2.LINE_AA)
+	def __init__(self, parent, controller):
+		tk.Frame.__init__(self, parent)
+		self.controller = controller
+		# label = tk.Label(self, text="This is page 2", font=controller.title_font)
+		# label.place(relx=.53, rely=.65, anchor="c")
+		home_button = tk.Button(self, text="Go to the start page",command=lambda: controller.show_frame("StartPage"))
+		home_button.place(relx=.9, rely=.9, anchor="c")
+		imageFrame = tk.Frame(self, width=1000, height=450)
+		imageFrame.grid(row=0, column=0, padx=12, pady=12)
+		a_button = tk.Button(self, text="A", bg="#2ce313", fg="black",command=lambda: self.detect_a)
+		a_button.grid(row=1,column=0)
+        
+		# video in frame
+		lmain = tk.Label(imageFrame)
+		lmain.grid(row=0, column=0)
+		cap = cv2.VideoCapture(0)
+		self.show_frame(self)
+
+		
 
 
 
