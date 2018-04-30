@@ -71,12 +71,7 @@ class StartPage(tk.Frame):
 
 class PageOne(tk.Frame):
 	random_alphabets = random.sample(range(1, 26), 5)
-	arr=[]
-	for x in random_alphabets:
-		arr.append(chr(x+64))
-	print(arr)
-		
-	
+	random_alphabets.sort()
 	def __init__(self, parent, controller):
 		tk.Frame.__init__(self, parent)
 		self.controller = controller
@@ -99,7 +94,10 @@ class PageOne(tk.Frame):
 
 		for i in self.random_alphabets:
 			a_button = tk.Button(self, text=chr(i+64), bg="#1eeeee", font=controller.h1_font, fg="black",command=lambda i=i: os.system(str(chr(i+64))+".py"), width=5)
-			a_button.grid(row=0,column=i, padx=20,pady=450)
+			if i==self.random_alphabets[0]:
+				a_button.grid(row=0,column=i, padx=(290,20),pady=450)
+			else:
+				a_button.grid(row=0,column=i, padx=20,pady=450)
 
 
 
