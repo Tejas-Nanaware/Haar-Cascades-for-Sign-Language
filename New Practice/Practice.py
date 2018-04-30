@@ -75,31 +75,34 @@ class StartPage(tk.Frame):
 		button2.pack(side="top", fill="x", pady=10)
 
 class PageTwo(tk.Frame):
+	A = ''
+	def show_frame(self):
+		_, frame = self.cap.read()
+		self.frame = cv2.flip(frame, 1)
+		cv2image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGBA)
+
+		gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+		A_cascade = cv2.CascadeClassifier('../Haar Cascades/Z.xml')
+		self.A = A_cascade.detectMultiScale(gray)
+		# print(self.A)
+		img = Image.fromarray(cv2image)
+		imgtk = ImageTk.PhotoImage(image=img)
+		self.lmain.imgtk = imgtk
+		self.lmain.configure(image=imgtk)
+		self.lmain.after(10, self.show_frame) 
+		sliderFrame = tk.Frame(self, width=1000, height=450)
+		sliderFrame.grid(row = 1000, column=0, padx=12, pady=12)
+		
 
 	def detect_a(self):
-		print("a")
-		for (x,y,w,h) in A:
-			cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 2)
+		for (x,y,w,h) in self.A:
+			#Debug Lines
+			# print ("Hello")
+			# print(self.A)
+			cv2.rectangle(self.frame, (x, y), (x + w, y + h), (255, 0, 0), 2)
 			font = cv2.FONT_HERSHEY_SIMPLEX
-			cv2.putText(frame,'A',(x,y+h), font, 4, (0,0,255), 3, cv2.LINE_AA)
-	def show_frame(self):
-			_, frame = cap.read()
-			frame = cv2.flip(frame, 1)
-			cv2image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGBA)
-
-			gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-			A_cascade = cv2.CascadeClassifier('../Haar Cascades/Z.xml')
-			A = A_cascade.detectMultiScale(gray)
-
-
-			img = Image.fromarray(cv2image)
-			imgtk = ImageTk.PhotoImage(image=img)
-			lmain.imgtk = imgtk
-			lmain.configure(image=imgtk)
-			lmain.after(10, show_frame) 
-			sliderFrame = tk.Frame(self, width=1000, height=450)
-			sliderFrame.grid(row = 1000, column=0, padx=12, pady=12)
-
+			cv2.putText(self.frame,'A',(x,y+h), font, 4, (0,0,255), 3, cv2.LINE_AA)
+	
 	def __init__(self, parent, controller):
 		tk.Frame.__init__(self, parent)
 		self.controller = controller
@@ -109,14 +112,14 @@ class PageTwo(tk.Frame):
 		home_button.place(relx=.9, rely=.9, anchor="c")
 		imageFrame = tk.Frame(self, width=1000, height=450)
 		imageFrame.grid(row=0, column=0, padx=12, pady=12)
-		a_button = tk.Button(self, text="A", bg="#2ce313", fg="black",command=lambda: self.detect_a)
+		a_button = tk.Button(self, text="A", bg="#2ce313", fg="black",command = self.detect_a)
 		a_button.grid(row=1,column=0)
         
 		# video in frame
-		lmain = tk.Label(imageFrame)
-		lmain.grid(row=0, column=0)
-		cap = cv2.VideoCapture(0)
-		self.show_frame(self)
+		self.lmain = tk.Label(imageFrame)
+		self.lmain.grid(row=0, column=0)
+		self.cap = cv2.VideoCapture(0)
+		self.show_frame()
 
 		
 
