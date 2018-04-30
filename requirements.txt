@@ -1,0 +1,6 @@
+opencv-python
+numpy
+matplotlib
+tkinter
+Pillow
+cx_Freeze
